@@ -1,0 +1,23 @@
+{
+  "name": "discord-summarizer",
+  "version": "1.0.0",
+  "description": "Discord bot that summarizes messages using ChatGPT",
+  "main": "dist/bot.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "npm run build && node dist/bot.js",
+    "dev": "ts-node src/bot.ts"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "discord.js": "^14.0.0",
+    "dotenv": "^16.0.0",
+    "openai": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^18.0.0",
+    "ts-node": "^10.0.0",
+    "typescript": "^5.0.0"
+  }
+}
