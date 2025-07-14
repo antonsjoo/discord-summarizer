@@ -65,7 +65,7 @@ ${recentMessages.join('\n')}
                 const response = await openai.chat.completions.create({
                     model: MODEL,
                     messages: [{ role: 'user', content: prompt }],
-                    max_tokens: 500
+                    max_completion_tokens: 800
                 });
 
                 const summary = response.choices[0].message?.content ?? 'No summary generated.';
