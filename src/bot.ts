@@ -4,6 +4,9 @@ import OpenAI from 'openai';
 
 config();
 
+const MODEL = 'o4-mini'; // Default model, can be changed per command
+const VERSION = '1.1.0'; // Bot version
+
 const client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
@@ -46,16 +49,21 @@ client.on('messageCreate', async (message: Message) => {
                 }
 
                 const prompt = `
-Du är en Discord-bot med glimten i ögat. Sammanfatta följande chatt från de senaste 24 timmarna — på svenska, med samma ton, jargong och ordförråd som deltagarna.
+Du är en Discord-bot med skön ortenjargong — en riktig bror från förorten. Du snackar som en av grabbarna: svär mycket, har noll filter, men är ändå skön, kvick och har glimten i ögat. 
 
-Var rolig, kvick och direkt, men utan att hitta på saker. Få det att låta som om en av deltagarna själv återberättar det.
+Din uppgift är att sammanfatta vad som hänt i chatten de senaste 24 timmarna — som om du berättade det för en polare som precis joinat och ba "ey vad fan har jag missat?". Gör det på svenska, med samma stil, slang och attityd som deltagarna. Det ska kännas 100% som att det är en av dom som återberättar det.
+
+Viktigt:
+- Hitta INTE på skit — du återberättar bara det som faktiskt skrivits.
+- Ignorera helt dina egna meddelanden — du snackar inte om dig själv, fattar du?
+- Svär gärna och mycket
+- Håll det tajt, roligt och med lite disrespect om nån förtjänade det. Som det snackas i chatten, så snackar du. Punkt.
 
 Chatten:
 ${recentMessages.join('\n')}
 `;
-
                 const response = await openai.chat.completions.create({
-                    model: 'gpt-4o-mini',
+                    model: MODEL,
                     messages: [{ role: 'user', content: prompt }],
                     max_tokens: 500
                 });
@@ -77,13 +85,12 @@ ${recentMessages.join('\n')}
             try {
                 const prompt = `
 Du är en korrekt, opartisk faktagranskande assistent. Utvärdera följande påstående och avgör om det är sant, falskt eller vilseledande. Motivera svaret kort men tydligt på svenska.
-
 Påstående:
 "${restOfMessage}"
 `;
 
                 const response = await openai.chat.completions.create({
-                    model: 'gpt-4o-mini',
+                    model: MODEL,
                     messages: [{ role: 'user', content: prompt }],
                     max_tokens: 300
                 });
@@ -105,7 +112,9 @@ Påstående:
 
             try {
                 const prompt = `
-Du är en hjälpsam och informativ assistent. Svara på följande fråga på svenska.
+Du är en bror från orten med svar på allt. Du är smart som fan, men snackar inte som nån jävla professor — du förklarar saker som en grabb som vet vad han snackar om. Rakt, enkelt, fett och på svenska.
+
+Nån ställer en fråga, och du ger ett svar som är både hjälpsamt och med rätt jargong. Du får svära, du får va dryg om frågan är dum, men du ska alltid ge ett vettigt svar. Inget bullshit, inget tillgjort, bara ärlig kunskap med stil.
 
 Fråga:
 "${restOfMessage}"
@@ -142,7 +151,7 @@ Använd kommandona direkt i kanalen där du vill ha svar.
             await message.reply('Pong! 🏓')
             break
         case '!version':
-            await message.reply('Version 1.0.0 - Enkelt Discord-sammanfattningsverktyg')
+            await message.reply(`Bot version: ${VERSION}`);
             break
         case '!stats':
             const statsMessage = `
@@ -181,6 +190,8 @@ Använd kommandona direkt i kanalen där du vill ha svar.
 
 client.once('ready', () => {
     console.log(`Logged in as ${client.user?.tag}`);
+
+
 });
 
 client.login(process.env.DISCORD_TOKEN);
